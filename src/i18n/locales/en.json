@@ -1,0 +1,75 @@
+{
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "learning": "Learning Hub",
+    "assessment": "Risk Assessment",
+    "map": "Disease Map",
+    "compliance": "Compliance",
+    "login": "Login"
+  },
+  "hero": {
+    "title": "Protect Your Farm with AI-Powered Biosecurity",
+    "subtitle": "Comprehensive farm biosecurity management for pig and poultry farms",
+    "cta": "Get Started",
+    "learnMore": "Learn More"
+  },
+  "features": {
+    "aiRisk": "AI Risk Assessment",
+    "aiRiskDesc": "Get instant biosecurity scores with AI-driven recommendations",
+    "learning": "Video Learning",
+    "learningDesc": "Expert training videos with quizzes and certificates",
+    "diseaseMap": "Disease Tracking",
+    "diseaseMapDesc": "Real-time outbreak alerts and geographical insights",
+    "compliance": "Compliance Tracker",
+    "complianceDesc": "Gamified progress tracking with badges and rewards"
+  },
+  "chatbot": {
+    "title": "Ask a Question",
+    "placeholder": "Type your biosecurity question here...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "welcome": "Hello! I'm your farm biosecurity assistant. Ask me anything about biosecurity practices, diseases, or compliance."
+  },
+  "auth": {
+    "login": "Login",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "farmName": "Farm Name",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signingIn": "Signing in...",
+    "creatingAccount": "Creating Account...",
+    "signInSuccess": "Login successful!",
+    "signUpSuccess": "Account created successfully!",
+    "termsAgree": "I agree to the Terms of Service and Privacy Policy",
+    "needHelp": "Need help? Contact Support"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "riskScore": "Biosecurity Risk Score",
+    "compliance": "Compliance Progress",
+    "alerts": "Active Alerts",
+    "viewAll": "View All"
+  },
+  "learning": {
+    "title": "Learning Hub",
+    "watchVideo": "Watch Video",
+    "takeQuiz": "Take Quiz",
+    "duration": "Duration"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  }
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,33 +7,88 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Mail, Lock, User, Phone, Tractor } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [signupData, setSignupData] = useState({
+    fullName: '',
+    phone: '',
+    email: '',
+    farmName: '',
+    password: ''
+  });
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        navigate("/dashboard");
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        navigate("/dashboard");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast.success("Login successful!");
-    navigate("/dashboard");
-    setIsLoading(false);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: loginPassword,
+      });
+
+      if (error) throw error;
+
+      toast.success(t('auth.signInSuccess'));
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast.error(error.message || 'Login failed');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast.success("Account created successfully!");
-    navigate("/dashboard");
-    setIsLoading(false);
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: signupData.email,
+        password: signupData.password,
+        options: {
+          data: {
+            full_name: signupData.fullName,
+            phone: signupData.phone,
+            farm_name: signupData.farmName,
+          },
+          emailRedirectTo: `${window.location.origin}/dashboard`
+        }
+      });
+
+      if (error) throw error;
+
+      toast.success(t('auth.signUpSuccess'));
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast.error(error.message || 'Signup failed');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -89,8 +144,9 @@ const Auth = () => {
         {/* Right Side - Auth Forms */}
         <Card className="border-2">
           <CardHeader className="text-center">
-            <div className="flex justify-center mb-4 md:hidden">
+            <div className="flex justify-center mb-4 md:hidden items-center gap-2">
               <Shield className="h-12 w-12 text-primary" />
+              <LanguageSwitcher />
             </div>
             <CardTitle className="text-2xl">Welcome to BioSecure India</CardTitle>
             <CardDescription>Sign in to access your farm biosecurity dashboard</CardDescription>
@@ -98,33 +154,37 @@ const Auth = () => {
           <CardContent>
             <Tabs defaultValue="login" className="space-y-6">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsTrigger value="login">{t('auth.login')}</TabsTrigger>
+                <TabsTrigger value="signup">{t('auth.signup')}</TabsTrigger>
               </TabsList>
 
               {/* Login Form */}
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="login-email">Email or Phone</Label>
+                    <Label htmlFor="login-email">{t('auth.email')}</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="login-email"
-                        type="text"
-                        placeholder="farmer@example.com or +91 9876543210"
+                        type="email"
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        placeholder="farmer@example.com"
                         className="pl-10"
                         required
                       />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="login-password">Password</Label>
+                    <Label htmlFor="login-password">{t('auth.password')}</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="login-password"
                         type="password"
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
                         placeholder="Enter your password"
                         className="pl-10"
                         required
@@ -134,12 +194,12 @@ const Auth = () => {
                   <div className="flex items-center justify-between text-sm">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input type="checkbox" className="rounded" />
-                      <span>Remember me</span>
+                      <span>{t('auth.rememberMe')}</span>
                     </label>
-                    <a href="#" className="text-primary hover:underline">Forgot password?</a>
+                    <a href="#" className="text-primary hover:underline">{t('auth.forgotPassword')}</a>
                   </div>
                   <Button type="submit" variant="hero" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Signing in..." : "Sign In"}
+                    {isLoading ? t('auth.signingIn') : t('auth.login')}
                   </Button>
                   <div className="relative my-6">
                     <div className="absolute inset-0 flex items-center">
@@ -160,12 +220,14 @@ const Auth = () => {
               <TabsContent value="signup">
                 <form onSubmit={handleSignup} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signup-name">Full Name</Label>
+                    <Label htmlFor="signup-name">{t('auth.fullName')}</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="signup-name"
                         type="text"
+                        value={signupData.fullName}
+                        onChange={(e) => setSignupData({...signupData, fullName: e.target.value})}
                         placeholder="Enter your full name"
                         className="pl-10"
                         required
@@ -173,12 +235,14 @@ const Auth = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-phone">Phone Number</Label>
+                    <Label htmlFor="signup-phone">{t('auth.phone')}</Label>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="signup-phone"
                         type="tel"
+                        value={signupData.phone}
+                        onChange={(e) => setSignupData({...signupData, phone: e.target.value})}
                         placeholder="+91 9876543210"
                         className="pl-10"
                         required
@@ -186,12 +250,14 @@ const Auth = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email Address</Label>
+                    <Label htmlFor="signup-email">{t('auth.email')}</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="signup-email"
                         type="email"
+                        value={signupData.email}
+                        onChange={(e) => setSignupData({...signupData, email: e.target.value})}
                         placeholder="farmer@example.com"
                         className="pl-10"
                         required
@@ -199,12 +265,14 @@ const Auth = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-farm">Farm Name</Label>
+                    <Label htmlFor="signup-farm">{t('auth.farmName')}</Label>
                     <div className="relative">
                       <Tractor className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="signup-farm"
                         type="text"
+                        value={signupData.farmName}
+                        onChange={(e) => setSignupData({...signupData, farmName: e.target.value})}
                         placeholder="Your farm name"
                         className="pl-10"
                         required
@@ -212,12 +280,14 @@ const Auth = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
+                    <Label htmlFor="signup-password">{t('auth.password')}</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="signup-password"
                         type="password"
+                        value={signupData.password}
+                        onChange={(e) => setSignupData({...signupData, password: e.target.value})}
                         placeholder="Create a strong password"
                         className="pl-10"
                         required
@@ -227,19 +297,18 @@ const Auth = () => {
                   <div className="flex items-start gap-2 text-sm">
                     <input type="checkbox" required className="mt-0.5 rounded" />
                     <span className="text-muted-foreground">
-                      I agree to the <a href="#" className="text-primary hover:underline">Terms of Service</a> and <a href="#" className="text-primary hover:underline">Privacy Policy</a>
+                      {t('auth.termsAgree')}
                     </span>
                   </div>
                   <Button type="submit" variant="hero" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Creating Account..." : "Create Account"}
+                    {isLoading ? t('auth.creatingAccount') : t('auth.signup')}
                   </Button>
                 </form>
               </TabsContent>
             </Tabs>
 
             <div className="mt-6 text-center text-sm text-muted-foreground">
-              <p>Built for Smart India Hackathon 2025</p>
-              <p className="mt-1">Need help? <a href="#" className="text-primary hover:underline">Contact Support</a></p>
+              <p className="mt-1">{t('auth.needHelp')}</p>
             </div>
           </CardContent>
         </Card>

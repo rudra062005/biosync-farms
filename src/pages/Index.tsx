@@ -3,31 +3,36 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Video, Award, Map, Brain, FileCheck, BarChart3, MessageSquare, ArrowRight, CheckCircle } from "lucide-react";
 import heroImage from "@/assets/hero-farm.jpg";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import Chatbot from "@/components/Chatbot";
 
 const Index = () => {
+  const { t } = useTranslation();
+  
   const features = [
     {
       icon: Brain,
-      title: "AI Risk Assessment",
-      description: "Get instant biosecurity scores with AI-powered recommendations tailored to your farm",
+      title: t('features.aiRisk'),
+      description: t('features.aiRiskDesc'),
       color: "text-primary"
     },
     {
       icon: Video,
-      title: "Video Learning Hub",
-      description: "Access expert-led video lessons with multilingual subtitles and offline downloads",
+      title: t('features.learning'),
+      description: t('features.learningDesc'),
       color: "text-accent"
     },
     {
       icon: Award,
-      title: "Gamified Compliance",
-      description: "Earn badges and certificates as you improve your farm's biosecurity practices",
+      title: t('features.compliance'),
+      description: t('features.complianceDesc'),
       color: "text-warning"
     },
     {
       icon: Map,
-      title: "Disease Outbreak Map",
-      description: "Stay updated with real-time alerts on disease outbreaks in your region",
+      title: t('features.diseaseMap'),
+      description: t('features.diseaseMapDesc'),
       color: "text-destructive"
     },
     {
@@ -64,22 +69,26 @@ const Index = () => {
             </div>
           </div>
           <nav className="hidden md:flex items-center gap-4">
-            <Link to="/about">
-              <Button variant="ghost" size="sm">About</Button>
-            </Link>
             <Link to="/learning">
-              <Button variant="ghost" size="sm">Learning Hub</Button>
+              <Button variant="ghost" size="sm">{t('nav.learning')}</Button>
             </Link>
             <Link to="/map">
-              <Button variant="ghost" size="sm">Disease Map</Button>
+              <Button variant="ghost" size="sm">{t('nav.map')}</Button>
             </Link>
+            <Link to="/assessment">
+              <Button variant="ghost" size="sm">{t('nav.assessment')}</Button>
+            </Link>
+            <LanguageSwitcher />
             <Link to="/auth">
-              <Button variant="default" size="sm">Login</Button>
+              <Button variant="default" size="sm">{t('nav.login')}</Button>
             </Link>
           </nav>
-          <Link to="/auth" className="md:hidden">
-            <Button variant="default" size="sm">Login</Button>
-          </Link>
+          <div className="md:hidden flex items-center gap-2">
+            <LanguageSwitcher />
+            <Link to="/auth">
+              <Button variant="default" size="sm">{t('nav.login')}</Button>
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -91,27 +100,24 @@ const Index = () => {
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
                 <Shield className="h-4 w-4" />
-                Smart India Hackathon 2025
+                AI-Powered Biosecurity
               </div>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                Protect Your Farm with
-                <span className="gradient-hero bg-clip-text text-transparent"> AI-Powered </span>
-                Biosecurity
+                {t('hero.title')}
               </h2>
               <p className="text-lg text-muted-foreground">
-                Comprehensive biosecurity management for pig and poultry farms. Get instant AI assessments, 
-                learn from expert videos, track compliance, and stay ahead of disease outbreaks.
+                {t('hero.subtitle')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/auth">
                   <Button variant="hero" size="xl" className="w-full sm:w-auto">
-                    Get Started Free
+                    {t('hero.cta')}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <Link to="/assessment">
                   <Button variant="outline" size="xl" className="w-full sm:w-auto">
-                    Take Assessment
+                    {t('nav.assessment')}
                   </Button>
                 </Link>
               </div>
@@ -259,11 +265,12 @@ const Index = () => {
             </div>
           </div>
           <div className="pt-8 border-t border-border text-center text-sm text-muted-foreground">
-            <p>Built for Smart India Hackathon 2025 by Team BioSecure 🚀</p>
-            <p className="mt-2">© 2025 BioSecure India Portal. All rights reserved.</p>
+            <p>© 2025 BioSecure India Portal. All rights reserved.</p>
           </div>
         </div>
       </footer>
+      
+      <Chatbot />
     </div>
   );
 };
