@@ -10,6 +10,8 @@ import {
   Award, Download, Search, Filter, ChevronRight,
   CheckCircle, Star, TrendingUp
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 interface VideoModule {
   id: string;
@@ -29,6 +31,7 @@ interface VideoModule {
 }
 
 const Learning = () => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
@@ -173,12 +176,13 @@ const Learning = () => {
           </div>
           <nav className="flex items-center gap-2">
             <Link to="/dashboard">
-              <Button variant="ghost" size="sm">Dashboard</Button>
+              <Button variant="ghost" size="sm">{t('nav.dashboard')}</Button>
             </Link>
             <Link to="/compliance">
-              <Button variant="ghost" size="sm">Compliance</Button>
+              <Button variant="ghost" size="sm">{t('nav.compliance')}</Button>
             </Link>
-            <Button variant="outline" size="sm">My Progress</Button>
+            <LanguageSwitcher />
+            <Button variant="outline" size="sm">{t('nav.myProgress')}</Button>
           </nav>
         </div>
       </header>
@@ -189,23 +193,22 @@ const Learning = () => {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
               <Video className="h-4 w-4" />
-              Expert-Led Training
+              {t('learning.expertLed')}
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Master Biosecurity with Video Learning
+              {t('learning.masterBiosecurity')}
             </h2>
             <p className="text-lg text-muted-foreground mb-6">
-              Access expert-led video courses with multilingual subtitles, downloadable resources, 
-              and interactive quizzes to earn certificates.
+              {t('learning.accessExpert')}
             </p>
             <div className="flex flex-wrap gap-4">
               <Button variant="hero" size="lg">
                 <PlayCircle className="mr-2 h-5 w-5" />
-                Start Learning
+                {t('learning.startLearning')}
               </Button>
               <Button variant="outline" size="lg">
                 <Download className="mr-2 h-5 w-5" />
-                Offline Mode
+                {t('learning.offlineMode')}
               </Button>
             </div>
           </div>

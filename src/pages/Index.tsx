@@ -50,10 +50,10 @@ const Index = () => {
   ];
 
   const stats = [
-    { value: "10,000+", label: "Farms Protected" },
-    { value: "50+", label: "Expert Videos" },
-    { value: "95%", label: "Compliance Rate" },
-    { value: "24/7", label: "AI Support" }
+    { value: "10,000+", label: t('stats.farmsProtected') },
+    { value: "50+", label: t('stats.expertVideos') },
+    { value: "95%", label: t('stats.complianceRate') },
+    { value: "24/7", label: t('stats.aiSupport') }
   ];
 
   return (
@@ -147,10 +147,10 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h3 className="text-3xl md:text-4xl font-bold mb-4">
-              Everything You Need for <span className="text-primary">Complete Biosecurity</span>
+              {t('features.everything')} <span className="text-primary">{t('features.completeBiosecurity')}</span>
             </h3>
             <p className="text-muted-foreground text-lg">
-              Comprehensive tools designed specifically for Indian pig and poultry farmers
+              {t('features.comprehensive')}
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -172,18 +172,18 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h3 className="text-3xl md:text-4xl font-bold mb-4">
-              How It Works
+              {t('howItWorks.title')}
             </h3>
             <p className="text-muted-foreground text-lg">
-              Simple 4-step process to secure your farm
+              {t('howItWorks.subtitle')}
             </p>
           </div>
           <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
             {[
-              { step: "1", title: "Sign Up", desc: "Create your free account in under 2 minutes" },
-              { step: "2", title: "Assess", desc: "Complete the AI-powered biosecurity questionnaire" },
-              { step: "3", title: "Learn", desc: "Watch videos and take quizzes to improve knowledge" },
-              { step: "4", title: "Comply", desc: "Implement recommendations and earn certificates" }
+              { step: "1", title: t('howItWorks.step1'), desc: t('howItWorks.step1Desc') },
+              { step: "2", title: t('howItWorks.step2'), desc: t('howItWorks.step2Desc') },
+              { step: "3", title: t('howItWorks.step3'), desc: t('howItWorks.step3Desc') },
+              { step: "4", title: t('howItWorks.step4'), desc: t('howItWorks.step4Desc') }
             ].map((item, index) => (
               <div key={index} className="text-center space-y-3">
                 <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto shadow-lg">
@@ -202,21 +202,21 @@ const Index = () => {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto space-y-6">
             <h3 className="text-3xl md:text-4xl font-bold">
-              Ready to Secure Your Farm?
+              {t('hero.readyToSecure')}
             </h3>
             <p className="text-lg opacity-90">
-              Join thousands of farmers already protecting their livestock with BioSecure India
+              {t('hero.joinThousands')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link to="/auth">
                 <Button variant="secondary" size="xl" className="w-full sm:w-auto shadow-xl">
-                  Start Free Assessment
+                  {t('hero.startFreeAssessment')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link to="/learning">
                 <Button variant="outline" size="xl" className="w-full sm:w-auto border-2 border-primary-foreground/20 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground">
-                  Explore Learning Hub
+                  {t('hero.exploreLearning')}
                 </Button>
               </Link>
             </div>
@@ -234,38 +234,38 @@ const Index = () => {
                 <span className="font-bold text-lg">BioSecure India</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Empowering farmers with AI-driven biosecurity solutions
+                {t('footer.tagline')}
               </p>
             </div>
             <div>
-              <h4 className="font-bold mb-4">Features</h4>
+              <h4 className="font-bold mb-4">{t('footer.features')}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/assessment" className="hover:text-primary">Risk Assessment</Link></li>
-                <li><Link to="/learning" className="hover:text-primary">Learning Hub</Link></li>
-                <li><Link to="/map" className="hover:text-primary">Disease Map</Link></li>
-                <li><Link to="/compliance" className="hover:text-primary">Compliance Tracker</Link></li>
+                <li><Link to="/assessment" className="hover:text-primary">{t('nav.assessment')}</Link></li>
+                <li><Link to="/learning" className="hover:text-primary">{t('nav.learning')}</Link></li>
+                <li><Link to="/map" className="hover:text-primary">{t('nav.map')}</Link></li>
+                <li><Link to="/compliance" className="hover:text-primary">{t('nav.compliance')}</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-4">Resources</h4>
+              <h4 className="font-bold mb-4">{t('footer.resources')}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary">Documentation</a></li>
-                <li><a href="#" className="hover:text-primary">Video Tutorials</a></li>
-                <li><a href="#" className="hover:text-primary">FAQ</a></li>
-                <li><a href="#" className="hover:text-primary">Support</a></li>
+                <li><a href="#" className="hover:text-primary">{t('footer.documentation')}</a></li>
+                <li><a href="#" className="hover:text-primary">{t('footer.videoTutorials')}</a></li>
+                <li><a href="#" className="hover:text-primary">{t('footer.faq')}</a></li>
+                <li><a href="#" className="hover:text-primary">{t('footer.support')}</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-4">Legal</h4>
+              <h4 className="font-bold mb-4">{t('footer.legal')}</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-primary">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-primary">Contact Us</a></li>
+                <li><a href="#" className="hover:text-primary">{t('footer.privacyPolicy')}</a></li>
+                <li><a href="#" className="hover:text-primary">{t('footer.termsOfService')}</a></li>
+                <li><a href="#" className="hover:text-primary">{t('footer.contactUs')}</a></li>
               </ul>
             </div>
           </div>
           <div className="pt-8 border-t border-border text-center text-sm text-muted-foreground">
-            <p>© 2025 BioSecure India Portal. All rights reserved.</p>
+            <p>{t('footer.copyright')}</p>
           </div>
         </div>
       </footer>

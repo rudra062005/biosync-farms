@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Shield, CheckCircle, AlertTriangle, Info } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 interface Question {
   id: string;
@@ -17,6 +19,7 @@ interface Question {
 }
 
 const Assessment = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -124,7 +127,7 @@ const Assessment = () => {
 
   const handleNext = () => {
     if (!answers[currentQuestion.id]) {
-      toast.error("Please select an answer to continue");
+      toast.error(t('assessment.selectAnswer'));
       return;
     }
     if (currentStep < totalQuestions - 1) {
@@ -156,7 +159,7 @@ const Assessment = () => {
 
   const handleSubmit = async () => {
     if (!answers[currentQuestion.id]) {
-      toast.error("Please answer the current question");
+      toast.error(t('assessment.answerCurrent'));
       return;
     }
 
@@ -171,7 +174,7 @@ const Assessment = () => {
     localStorage.setItem("biosecurity_score", score.toString());
     localStorage.setItem("assessment_date", new Date().toISOString());
     
-    toast.success("Assessment completed successfully!");
+    toast.success(t('assessment.completed'));
     
     // Navigate to results/dashboard
     navigate("/dashboard");
@@ -186,12 +189,15 @@ const Assessment = () => {
             <Shield className="h-8 w-8 text-primary" />
             <div>
               <h1 className="text-xl font-bold text-foreground">BioSecure India</h1>
-              <p className="text-xs text-muted-foreground">Biosecurity Assessment</p>
+              <p className="text-xs text-muted-foreground">{t('assessment.title')}</p>
             </div>
           </div>
-          <Button variant="outline" size="sm" onClick={() => navigate("/dashboard")}>
-            Exit Assessment
-          </Button>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+            <Button variant="outline" size="sm" onClick={() => navigate("/dashboard")}>
+              {t('nav.exitAssessment')}
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -202,10 +208,10 @@ const Assessment = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-medium">
-                  Question {currentStep + 1} of {totalQuestions}
+                  {t('assessment.questionOf', { current: currentStep + 1, total: totalQuestions })}
                 </span>
                 <span className="text-muted-foreground">
-                  {Math.round(progressPercentage)}% Complete
+                  {Math.round(progressPercentage)}% {t('assessment.complete')}
                 </span>
               </div>
               <Progress value={progressPercentage} className="h-2" />
@@ -270,7 +276,7 @@ const Assessment = () => {
                 disabled={currentStep === 0}
                 className="flex-1"
               >
-                Previous
+                {t('assessment.previous')}
               </Button>
               {currentStep < totalQuestions - 1 ? (
                 <Button
@@ -279,7 +285,7 @@ const Assessment = () => {
                   disabled={!answers[currentQuestion.id]}
                   className="flex-1"
                 >
-                  Next Question
+                  {t('assessment.nextQuestion')}
                 </Button>
               ) : (
                 <Button
@@ -288,7 +294,7 @@ const Assessment = () => {
                   disabled={!answers[currentQuestion.id] || isSubmitting}
                   className="flex-1"
                 >
-                  {isSubmitting ? "Analyzing..." : "Complete Assessment"}
+                  {isSubmitting ? t('assessment.analyzing') : t('assessment.completeAssessment')}
                 </Button>
               )}
             </div>
@@ -301,21 +307,21 @@ const Assessment = () => {
             <CardContent className="pt-6">
               <CheckCircle className="h-8 w-8 text-success mx-auto mb-2" />
               <p className="text-2xl font-bold">{Object.keys(answers).length}</p>
-              <p className="text-xs text-muted-foreground">Answered</p>
+              <p className="text-xs text-muted-foreground">{t('assessment.answered')}</p>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-6">
               <AlertTriangle className="h-8 w-8 text-warning mx-auto mb-2" />
               <p className="text-2xl font-bold">{totalQuestions - Object.keys(answers).length}</p>
-              <p className="text-xs text-muted-foreground">Remaining</p>
+              <p className="text-xs text-muted-foreground">{t('assessment.remaining')}</p>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-6">
               <Shield className="h-8 w-8 text-primary mx-auto mb-2" />
               <p className="text-2xl font-bold">{totalQuestions}</p>
-              <p className="text-xs text-muted-foreground">Total Questions</p>
+              <p className="text-xs text-muted-foreground">{t('assessment.totalQuestions')}</p>
             </CardContent>
           </Card>
         </div>

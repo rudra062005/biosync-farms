@@ -22,7 +22,8 @@ const Auth = () => {
     phone: '',
     email: '',
     farmName: '',
-    password: ''
+    password: '',
+    stakeholder: 'farmer' as 'farmer' | 'veterinarian' | 'government_officer' | 'policymaker'
   });
 
   useEffect(() => {
@@ -67,7 +68,7 @@ const Auth = () => {
     setIsLoading(true);
     
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: signupData.email,
         password: signupData.password,
         options: {
@@ -75,10 +76,27 @@ const Auth = () => {
             full_name: signupData.fullName,
             phone: signupData.phone,
             farm_name: signupData.farmName,
+            stakeholder: signupData.stakeholder
           },
           emailRedirectTo: `${window.location.origin}/dashboard`
         }
       });
+
+      if (error) throw error;
+
+      // Insert the stakeholder role
+      if (data.user) {
+        const { error: roleError } = await supabase
+          .from('user_roles')
+          .insert({
+            user_id: data.user.id,
+            role: signupData.stakeholder
+          });
+        
+        if (roleError) {
+          console.error('Role assignment error:', roleError);
+        }
+      }
 
       if (error) throw error;
 
@@ -105,10 +123,10 @@ const Auth = () => {
           </div>
           <div className="space-y-4">
             <h2 className="text-3xl font-bold leading-tight">
-              Protect Your Farm with <span className="text-primary">AI-Powered</span> Biosecurity
+              {t('auth.protectFarm')} <span className="text-primary">{t('auth.aiPoweredBio')}</span>
             </h2>
             <p className="text-muted-foreground text-lg">
-              Join thousands of farmers securing their livestock with comprehensive biosecurity management.
+              {t('auth.joinFarmers')}
             </p>
             <div className="space-y-3 pt-4">
               {[
@@ -148,8 +166,8 @@ const Auth = () => {
               <Shield className="h-12 w-12 text-primary" />
               <LanguageSwitcher />
             </div>
-            <CardTitle className="text-2xl">Welcome to BioSecure India</CardTitle>
-            <CardDescription>Sign in to access your farm biosecurity dashboard</CardDescription>
+            <CardTitle className="text-2xl">{t('auth.welcomeBack')}</CardTitle>
+            <CardDescription>{t('auth.signInAccess')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="space-y-6">
@@ -211,7 +229,7 @@ const Auth = () => {
                   </div>
                   <Button type="button" variant="outline" className="w-full">
                     <Phone className="mr-2 h-4 w-4" />
-                    Sign in with OTP
+                    {t('auth.signInWithOTP')}
                   </Button>
                 </form>
               </TabsContent>
@@ -264,7 +282,7 @@ const Auth = () => {
                       />
                     </div>
                   </div>
-                  <div className="space-y-2">
+                   <div className="space-y-2">
                     <Label htmlFor="signup-farm">{t('auth.farmName')}</Label>
                     <div className="relative">
                       <Tractor className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -278,6 +296,21 @@ const Auth = () => {
                         required
                       />
                     </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-stakeholder">{t('auth.stakeholder')}</Label>
+                    <select
+                      id="signup-stakeholder"
+                      value={signupData.stakeholder}
+                      onChange={(e) => setSignupData({...signupData, stakeholder: e.target.value as any})}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      required
+                    >
+                      <option value="farmer">{t('auth.farmer')}</option>
+                      <option value="veterinarian">{t('auth.veterinarian')}</option>
+                      <option value="government_officer">{t('auth.governmentOfficer')}</option>
+                      <option value="policymaker">{t('auth.policymaker')}</option>
+                    </select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">{t('auth.password')}</Label>

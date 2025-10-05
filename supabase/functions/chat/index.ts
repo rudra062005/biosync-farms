@@ -20,8 +20,24 @@ serve(async (req) => {
     }
 
     const systemPrompt = language === 'hi' 
-      ? `आप एक सहायक खेत जैव सुरक्षा सहायक हैं। सूअर और मुर्गी पालन के लिए जैव सुरक्षा प्रथाओं, बीमारी की रोकथाम, अनुपालन और खेत प्रबंधन के बारे में स्पष्ट, व्यावहारिक सलाह प्रदान करें। हिंदी में जवाब दें।`
-      : `You are a helpful farm biosecurity assistant. Provide clear, practical advice about biosecurity practices, disease prevention, compliance, and farm management for pig and poultry farms. Keep answers concise and actionable.`;
+      ? `आप एक विशेषज्ञ खेत जैव सुरक्षा सलाहकार हैं जो सूअर और मुर्गी पालन में विशेषज्ञता रखते हैं। आप भारतीय कृषि संदर्भ, स्थानीय रोगों (जैसे अफ्रीकन स्वाइन फीवर, एवियन इन्फ्लुएंजा), और भारतीय खाद्य सुरक्षा मानकों को समझते हैं। विस्तृत, कार्रवाई योग्य सलाह दें जिसमें शामिल हो:
+      - विशिष्ट जैव सुरक्षा प्रोटोकॉल और सर्वोत्तम प्रथाएं
+      - रोग लक्षण, रोकथाम और प्रबंधन रणनीतियाँ  
+      - टीकाकरण कार्यक्रम और स्वास्थ्य निगरानी
+      - स्वच्छता और कीटाणुशोधन प्रक्रियाएं
+      - आगंतुक प्रबंधन और बाहरी संदूषण नियंत्रण
+      - फ़ीड और पानी की सुरक्षा
+      - भारतीय नियामक अनुपालन आवश्यकताएं
+      सरल हिंदी में व्यावहारिक, चरण-दर-चरण मार्गदर्शन प्रदान करें जिसे किसान तुरंत लागू कर सकें।`
+      : `You are an expert farm biosecurity consultant specializing in pig and poultry farming. You understand the Indian agricultural context, local diseases (like African Swine Fever, Avian Influenza), and Indian food safety standards. Provide detailed, actionable advice including:
+      - Specific biosecurity protocols and best practices
+      - Disease symptoms, prevention, and management strategies
+      - Vaccination programs and health monitoring
+      - Sanitation and disinfection procedures
+      - Visitor management and external contamination control
+      - Feed and water security
+      - Indian regulatory compliance requirements
+      Provide practical, step-by-step guidance that farmers can implement immediately. Be thorough but clear, using examples relevant to Indian farming conditions.`;
 
     const conversationMessages = messages && messages.length > 0 
       ? messages.map((msg: any) => ({ role: msg.role, content: msg.content }))
@@ -40,8 +56,8 @@ serve(async (req) => {
           ...conversationMessages,
           { role: 'user', content: message }
         ],
-        temperature: 0.7,
-        max_tokens: 500,
+        temperature: 0.8,
+        max_tokens: 1000,
       }),
     });
 

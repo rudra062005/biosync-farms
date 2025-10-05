@@ -9,8 +9,11 @@ import {
   AlertTriangle, CheckCircle, TrendingUp, Clock, 
   PlayCircle, BookOpen, Trophy, ArrowRight 
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const [biosecurityScore] = useState(72);
   const [complianceLevel] = useState("Silver");
 
@@ -27,10 +30,10 @@ const Dashboard = () => {
   };
 
   const quickActions = [
-    { icon: Shield, label: "Take Assessment", to: "/assessment", variant: "default" as const },
-    { icon: Video, label: "Watch Videos", to: "/learning", variant: "accent" as const },
-    { icon: Map, label: "View Disease Map", to: "/map", variant: "warning" as const },
-    { icon: FileCheck, label: "Health Passport", to: "/passport", variant: "success" as const },
+    { icon: Shield, label: t('dashboard.takeAssessment'), to: "/assessment", variant: "default" as const },
+    { icon: Video, label: t('dashboard.watchVideos'), to: "/learning", variant: "accent" as const },
+    { icon: Map, label: t('dashboard.viewDiseaseMap'), to: "/map", variant: "warning" as const },
+    { icon: FileCheck, label: t('dashboard.healthPassport'), to: "/passport", variant: "success" as const },
   ];
 
   const recentActivities = [
@@ -83,15 +86,16 @@ const Dashboard = () => {
           </div>
           <nav className="flex items-center gap-2">
             <Link to="/learning">
-              <Button variant="ghost" size="sm">Learning</Button>
+              <Button variant="ghost" size="sm">{t('nav.learning')}</Button>
             </Link>
             <Link to="/map">
-              <Button variant="ghost" size="sm">Map</Button>
+              <Button variant="ghost" size="sm">{t('nav.map')}</Button>
             </Link>
             <Link to="/compliance">
-              <Button variant="ghost" size="sm">Compliance</Button>
+              <Button variant="ghost" size="sm">{t('nav.compliance')}</Button>
             </Link>
-            <Button variant="outline" size="sm">Profile</Button>
+            <LanguageSwitcher />
+            <Button variant="outline" size="sm">{t('nav.profile')}</Button>
           </nav>
         </div>
       </header>
@@ -99,8 +103,8 @@ const Dashboard = () => {
       <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Welcome Section */}
         <div>
-          <h2 className="text-3xl font-bold mb-2">Welcome back, Farmer! 👋</h2>
-          <p className="text-muted-foreground">Here's your farm biosecurity overview</p>
+          <h2 className="text-3xl font-bold mb-2">{t('dashboard.welcome')} 👋</h2>
+          <p className="text-muted-foreground">{t('dashboard.overview')}</p>
         </div>
 
         {/* Score and Compliance Cards */}
@@ -110,8 +114,8 @@ const Dashboard = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Biosecurity Score</CardTitle>
-                  <CardDescription>Based on your last assessment</CardDescription>
+                  <CardTitle>{t('dashboard.biosecurityScore')}</CardTitle>
+                  <CardDescription>{t('dashboard.basedOnAssessment')}</CardDescription>
                 </div>
                 <Shield className={`h-12 w-12 ${getScoreColor(biosecurityScore)}`} />
               </div>
@@ -126,11 +130,11 @@ const Dashboard = () => {
               </div>
               <div className="flex items-center justify-between text-sm">
                 <Badge variant={biosecurityScore >= 80 ? "default" : "secondary"} className="text-xs">
-                  {biosecurityScore >= 80 ? "High" : biosecurityScore >= 60 ? "Medium" : "Low"} Risk Level
+                  {biosecurityScore >= 80 ? t('dashboard.highRisk') : biosecurityScore >= 60 ? t('dashboard.mediumRisk') : t('dashboard.lowRisk')}
                 </Badge>
                 <Link to="/assessment">
                   <Button variant="link" size="sm" className="h-auto p-0">
-                    Retake Assessment <ArrowRight className="ml-1 h-3 w-3" />
+                    {t('dashboard.retakeAssessment')} <ArrowRight className="ml-1 h-3 w-3" />
                   </Button>
                 </Link>
               </div>
@@ -142,8 +146,8 @@ const Dashboard = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Compliance Level</CardTitle>
-                  <CardDescription>Your current achievement tier</CardDescription>
+                  <CardTitle>{t('dashboard.complianceLevel')}</CardTitle>
+                  <CardDescription>{t('dashboard.currentTier')}</CardDescription>
                 </div>
                 <Trophy className="h-12 w-12 text-warning badge-glow" />
               </div>
@@ -161,7 +165,7 @@ const Dashboard = () => {
               </div>
               <Link to="/compliance">
                 <Button variant="outline" className="w-full">
-                  View Progress <TrendingUp className="ml-2 h-4 w-4" />
+                  {t('dashboard.viewProgress')} <TrendingUp className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
             </CardContent>
@@ -171,8 +175,8 @@ const Dashboard = () => {
         {/* Quick Actions */}
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>Common tasks and features</CardDescription>
+            <CardTitle>{t('dashboard.quickActions')}</CardTitle>
+            <CardDescription>{t('dashboard.commonTasks')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -197,8 +201,8 @@ const Dashboard = () => {
           <div className="lg:col-span-2 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>AI Recommendations</CardTitle>
-                <CardDescription>Personalized actions to improve your score</CardDescription>
+                <CardTitle>{t('dashboard.aiRecommendations')}</CardTitle>
+                <CardDescription>{t('dashboard.personalizedActions')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {recommendations.map((rec, index) => (
@@ -224,8 +228,8 @@ const Dashboard = () => {
             {/* Recent Activity */}
             <Card>
               <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>Your latest actions and achievements</CardDescription>
+                <CardTitle>{t('dashboard.recentActivity')}</CardTitle>
+                <CardDescription>{t('dashboard.latestActions')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -251,8 +255,8 @@ const Dashboard = () => {
             {/* Upcoming Tasks */}
             <Card>
               <CardHeader>
-                <CardTitle>Upcoming Tasks</CardTitle>
-                <CardDescription>Don't miss these deadlines</CardDescription>
+                <CardTitle>{t('dashboard.upcomingTasks')}</CardTitle>
+                <CardDescription>{t('dashboard.dontMiss')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -274,26 +278,26 @@ const Dashboard = () => {
             {/* Stats Card */}
             <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
               <CardHeader>
-                <CardTitle>Learning Progress</CardTitle>
+                <CardTitle>{t('dashboard.learningProgress')}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span>Videos Watched</span>
+                    <span>{t('dashboard.videosWatched')}</span>
                     <span className="font-bold">12/50</span>
                   </div>
                   <Progress value={24} />
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span>Quizzes Passed</span>
+                    <span>{t('dashboard.quizzesPassed')}</span>
                     <span className="font-bold">8/15</span>
                   </div>
                   <Progress value={53} />
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span>Certificates Earned</span>
+                    <span>{t('dashboard.certificatesEarned')}</span>
                     <span className="font-bold">3</span>
                   </div>
                 </div>
